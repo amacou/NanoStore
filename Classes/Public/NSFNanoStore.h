@@ -1,19 +1,19 @@
 /*
      NSFNanoStore.h
      NanoStore
-     
+
      Copyright (c) 2010 Webbo, L.L.C. All rights reserved.
-     
+
      Redistribution and use in source and binary forms, with or without modification, are permitted
      provided that the following conditions are met:
-     
+
      * Redistributions of source code must retain the above copyright notice, this list of conditions
      and the following disclaimer.
      * Redistributions in binary form must reproduce the above copyright notice, this list of conditions
      and the following disclaimer in the documentation and/or other materials provided with the distribution.
      * Neither the name of Webbo nor the names of its contributors may be used to endorse or promote
      products derived from this software without specific prior written permission.
-     
+
      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
      WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
      PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY
@@ -35,29 +35,29 @@
  @code
  // Instantiate a NanoStore and open it
  NSFNanoStore *nanoStore = [NSFNanoStore createAndOpenStoreWithType:NSFMemoryStoreType path:nil error:nil];
- 
+
  // Add some data to the document store
  NSDictionary *info = ...;
  NSFNanoObject *object = [NSFNanoObject nanoObjectWithDictionary:info];
  [nanoStore addObject:object error:nil];
- 
+
  // Return all objects via NSFNanoSearch
  NSFNanoSearch *search = [NSFNanoSearch searchWithStore:nanoStore];
  NSDictionary *searchResults = [search searchObjectsWithReturnType:NSFReturnObjects error:nil];
- 
+
  // Return the keys of all objects
  NSArray *keys = [search searchObjectsWithReturnType:NSFReturnKeys error:nil];
- 
+
  // Search one or more objects with a series of keys via NSFNanoStore
  NSArray *objects = [nanoStore objectsWithKeysInArray:[NSArray arrayWithObject:@"ABC-123"]];
- 
+
  // Search an object with a given key via NSFNanoSearch
  [search setKey:@"ABC-123"];
  objects = [search searchObjectsWithReturnType:NSFReturnObjects error:nil];
- 
+
  // Remove an object from the document store
  [nanoStore removeObject:object error:nil];
- 
+
  // Close the document store
  [nanoStore closeWithError:nil];
  @endcode
@@ -76,21 +76,21 @@
 /** * The type of engine mode used by NanoStore to process data in the document store.
  The mode can be one of two options: <i>NSFEngineProcessingDefaultMode</i> and <i>NSFEngineProcessingFastMode</i>. See <i>NSFEngineProcessingMode</i>
  to learn more about how these options affect the engine behavior.
- 
+
  In default mode, the pragmas are set as follows:
- 
+
  - PRAGMA fullfsync = OFF;
  - PRAGMA synchronous = FULL;
  - PRAGMA journal_mode = DELETE;
  - PRAGMA temp_store = DEFAULT;
- 
+
  In fast mode, the pragmas are set to:
- 
+
  - PRAGMA fullfsync = OFF;
  - PRAGMA synchronous = OFF;
  - PRAGMA journal_mode = MEMORY;
  - PRAGMA temp_store = MEMORY;
- 
+
  @note Set this property before you open the document store.
  @see - (BOOL)openWithError:(out NSError **)outError;
  */
@@ -99,6 +99,9 @@
 @property (nonatomic, assign, readwrite) NSUInteger saveInterval;
 /** * Whether there are objects that haven't been saved to the store. */
 @property (nonatomic, readonly) BOOL hasUnsavedChanges;
+
+/** * If Set NO, then Dont Insert Data to NFSValue Table and Can't Find by property . */
+@property (nonatomic) BOOL makeValueData ;
 
 /** @name Creating and Initializing NanoStore
  */
