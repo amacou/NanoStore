@@ -49,6 +49,8 @@ NSString * NSFStringFromNanoDataType (NSFNanoDatatype aNanoDatatype)
         case NSFNanoTypeDate: value = @"TEXT"; break;
         case NSFNanoTypeNumber: value = @"REAL"; break;
         case NSFNanoTypeRowUID: value = @"INTEGER"; break;
+        case NSFNanoTypeNULL: value = @"NULL"; break;
+        case NSFNanoTypeURL: value = @"URL"; break;
     }
     
     return value;
@@ -63,7 +65,8 @@ NSFNanoDatatype NSFNanoDatatypeFromString (NSString *aNanoDatatype)
     else if ([aNanoDatatype isEqualToString:@"TEXT"]) value = NSFNanoTypeDate;
     else if ([aNanoDatatype isEqualToString:@"REAL"]) value = NSFNanoTypeNumber;
     else if ([aNanoDatatype isEqualToString:@"INTEGER"]) value = NSFNanoTypeRowUID;
-
+    else if ([aNanoDatatype isEqualToString:@"NULL"]) value = NSFNanoTypeNULL;
+    else if ([aNanoDatatype isEqualToString:@"URL"]) value = NSFNanoTypeURL;
     return value;
 }
 
@@ -82,6 +85,7 @@ NSString * NSFStringFromMatchType (NSFMatchType aMatchType)
         case NSFInsensitiveEndsWith: value = @"Ends with (case insensitive)"; break;
         case NSFGreaterThan: value = @"Greater than"; break;
         case NSFLessThan: value = @"Less than"; break;
+        case NSFNotEqualTo: value = @"Not equal to"; break;
     }
     
     return value;
@@ -115,12 +119,12 @@ NSString * const NSFValue                                       = @"NSFValue";
 NSString * const NSFDatatype                                    = @"NSFDatatype";
 NSString * const NSFCalendarDate                                = @"NSFCalendarDate";
 NSString * const NSFObjectClass                                 = @"NSFObjectClass";
-NSString * const NSFPlist                                       = @"NSFPlist";
+NSString * const NSFKeyedArchive                                = @"NSFKeyedArchive";
 
 #pragma mark -
 
 NSString * const NSF_Private_NSFKeys_NSFKey             = @"NSFKeys.NSFKey";
-NSString * const NSF_Private_NSFKeys_NSFPlist           = @"NSFKeys.NSFPlist";
+NSString * const NSF_Private_NSFKeys_NSFKeyedArchive    = @"NSFKeys.NSFKeyedArchive";
 NSString * const NSF_Private_NSFValues_NSFKey           = @"NSFValues.NSFKey";
 NSString * const NSF_Private_NSFValues_NSFAttribute     = @"NSFValues.NSFAttribute";
 NSString * const NSF_Private_NSFValues_NSFValue         = @"NSFValues.NSFValue";
@@ -137,9 +141,6 @@ NSInteger const NSFNanoStoreErrorKey                               = -10002;
 
 #pragma mark Private section
 
-NSString * const NSFP_SchemaTable                    = @"NSFP_SchemaTable";
 NSString * const NSFP_TableIdentifier                = @"NSFP_TableIdentifier";
 NSString * const NSFP_ColumnIdentifier               = @"NSFP_ColumnIdentifier";
 NSString * const NSFP_DatatypeIdentifier             = @"NSFP_DatatypeIdentifier";
-
-NSString * const NSFP_FullDatatypeIdentifier                = @"NSFP_SchemaTable.NSFP_DatatypeIdentifier";

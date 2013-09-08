@@ -26,14 +26,21 @@
 
 #import "NSFNanoObject.h"
 #import "NSFNanoObject_Private.h"
+#import "NSFNanoGlobals.h"
 #import "NSFNanoGlobals_Private.h"
+#import "NSFOrderedDictionary.h"
+
+@interface NSFNanoObject ()
+/** \cond */
+@property (nonatomic, weak, readwrite) NSFNanoStore *store;
+@property (nonatomic, copy, readwrite) NSString *key;
+/** \endcond */
+@end
 
 @implementation NSFNanoObject
 {
-    NSMutableDictionary *info;
+    NSMutableDictionary *_info;
 }
-
-@synthesize info, key, originalClassString;
 
 + (NSFNanoObject *)nanoObject
 {
@@ -67,37 +74,50 @@
     if ((self = [self init])) {
         // If we have supplied a key, honor it and overwrite the original one
         if (nil != aKey) {
-            key = [aKey copy];
+            _key = aKey;
         }
         
         // Keep the dictionary if needed
         if (nil != aDictionary) {
-            info = [NSMutableDictionary new];
-            [info addEntriesFromDictionary:aDictionary];
+            _info = [NSMutableDictionary new];
+            [_info addEntriesFromDictionary:aDictionary];
         }
+        
+        _store = aStore;
     }
     
     return self;
 }
 
+- (void)setStore:(NSFNanoStore *)store
+{
+    _store = store;
+}
+
 - (NSString *)description
 {
-    NSMutableString *description = [NSMutableString string];
-    
-    [description appendString:@"\n"];
-    [description appendString:[NSString stringWithFormat:@"NanoObject address : %p\n", self]];
-    [description appendString:[NSString stringWithFormat:@"Original class     : %@\n", (nil != originalClassString) ? originalClassString : NSStringFromClass ([self class])]];
-    [description appendString:[NSString stringWithFormat:@"Key                : %@\n", key]];
-    [description appendString:[NSString stringWithFormat:@"Info               : %ld key/value pairs\n", [info count]]];
+    return [self JSONDescription];
+}
 
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:info options:NSJSONWritingPrettyPrinted error:&error];
-    if (nil == error) {
-        NSString *JSONInfo = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-        [description appendString:[NSString stringWithFormat:@"%@\n", JSONInfo]];
-    } else {
-        [description appendString:[NSString stringWithFormat:@"Contents:          : <unable to display the contents>\n"]];
-    }
+- (NSDictionary *)dictionaryDescription
+{
+    NSFOrderedDictionary *values = [NSFOrderedDictionary new];
+    
+    values[@"NanoObject address"] = [NSString stringWithFormat:@"%p", self];
+    values[@"Original class"] = (nil != _originalClassString) ? _originalClassString : NSStringFromClass ([self class]);
+    values[@"Key"] = _key;
+    values[@"Property count"] = @([_info count]);
+    values[@"Contents"] = _info;
+    
+    return values;
+}
+
+- (NSString *)JSONDescription
+{
+    NSDictionary *values = [self dictionaryDescription];
+    
+    NSError *outError = nil;
+    NSString *description = [NSFNanoObject _NSObjectToJSONString:values error:&outError];
     
     return description;
 }
@@ -105,41 +125,41 @@
 - (void)addEntriesFromDictionary:(NSDictionary *)otherDictionary
 {
     // Allocate the dictionary if needed
-    if (nil == info) {
-        info = [NSMutableDictionary new];
+    if (nil == _info) {
+        _info = [NSMutableDictionary new];
     }
     
-    [info addEntriesFromDictionary:otherDictionary];
+    [_info addEntriesFromDictionary:otherDictionary];
 }
 
 - (void)setObject:(id)anObject forKey:(NSString *)aKey
 {
     // Allocate the dictionary if needed
-    if (nil == info) {
-        info = [NSMutableDictionary new];
+    if (nil == _info) {
+        _info = [NSMutableDictionary new];
     }
     
-    [info setObject:anObject forKey:aKey];
+    [_info setObject:anObject forKey:aKey];
 }
 
 - (id)objectForKey:(NSString *)aKey
 {
-    return [info objectForKey:aKey];
+    return [_info objectForKey:aKey];
 }
 
 - (void)removeObjectForKey:(NSString *)aKey
 {
-    [info removeObjectForKey:aKey];
+    [_info removeObjectForKey:aKey];
 }
 
 - (void)removeAllObjects
 {
-    [info removeAllObjects];
+    [_info removeAllObjects];
 }
 
 - (void)removeObjectsForKeys:(NSArray *)keyArray
 {
-    [info removeObjectsForKeys:keyArray];
+    [_info removeObjectsForKeys:keyArray];
 }
 
 - (BOOL)isEqualToNanoObject:(NSFNanoObject *)otherNanoObject
@@ -150,17 +170,24 @@
     
     BOOL success = YES;
     
-    if (originalClassString != otherNanoObject.originalClassString) {
-        if (NO == [originalClassString isEqualToString:otherNanoObject.originalClassString]) {
+    if (_originalClassString != otherNanoObject.originalClassString) {
+        if (NO == [_originalClassString isEqualToString:otherNanoObject.originalClassString]) {
             success = NO;
         }
     }
     
-    if (YES == success) {
-        success = [info isEqualToDictionary:otherNanoObject.info];
+    if (success) {
+        success = [_info isEqualToDictionary:otherNanoObject.info];
     }
     
     return success;
+}
+
+- (BOOL)saveStoreAndReturnError:(NSError * __autoreleasing *)outError
+{
+    [_store addObject:self error:outError];
+    
+    return [_store saveStoreAndReturnError:outError];
 }
 
 - (NSDictionary *)dictionaryRepresentation
@@ -173,9 +200,10 @@
 - (id)init
 {
     if ((self = [super init])) {
-        key = [[NSFNanoEngine stringWithUUID]copy];
-        info = nil;
-        originalClassString = nil;
+        _key = [NSFNanoEngine stringWithUUID];
+        _info = nil;
+        _originalClassString = nil;
+        _store = nil;
     }
     
     return self;
@@ -202,7 +230,7 @@
 
 - (id)rootObject
 {
-    return info;
+    return _info;
 }
 
 #pragma mark -
@@ -211,9 +239,93 @@
 
 - (void)_setOriginalClassString:(NSString *)theClassString
 {
-    if (originalClassString != theClassString) {
-        originalClassString = theClassString;
+    if (_originalClassString != theClassString) {
+        _originalClassString = theClassString;
     }
+}
+
++ (NSString *)_NSObjectToJSONString:(id)object error:(NSError **)error
+{
+    // Make sure we have a safe object
+    object = [NSFNanoObject _safeObjectFromObject:object];
+    
+    NSError *tempError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object options:NSJSONWritingPrettyPrinted error:&tempError];
+    if (nil == tempError) {
+        NSString *JSONInfo = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+        return JSONInfo;
+    }
+    
+    if (error != nil) {
+        *error = tempError;
+    }
+    
+    return [tempError localizedDescription];
+}
+
++ (id)_safeObjectFromObject:(id)object
+{
+    if ([object isKindOfClass:[NSArray class]]) {
+        return [NSFNanoObject _safeArrayFromArray:object];
+    }
+    
+    if ([object isKindOfClass:[NSDictionary class]]) {
+        return [NSFNanoObject _safeDictionaryFromDictionary:object];
+    }
+    
+	NSArray *validClasses = @[ [NSString class], [NSNumber class], [NSNull class] ];
+	for (Class c in validClasses) {
+		if ([object isKindOfClass:c])
+			return object;
+	}
+    
+	if ([object isKindOfClass:[NSDate class]]) {
+		NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+		[formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+		[formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+		NSString *ISOString = [formatter stringFromDate:object];
+		return ISOString;
+	}
+    
+	return [object description];
+}
+
++ (NSDictionary *)_safeDictionaryFromDictionary:(NSDictionary *)dictionary
+{
+	NSMutableDictionary *cleanDictionary = [NSMutableDictionary dictionary];
+    
+	for (NSString *theKey in [dictionary allKeys]) {
+		id object = [dictionary objectForKey:theKey];
+        
+		if ([object isKindOfClass:[NSDictionary class]])
+			[cleanDictionary setObject:[NSFNanoObject _safeDictionaryFromDictionary:object] forKey:theKey];
+        
+		else if ([object isKindOfClass:[NSArray class]])
+			[cleanDictionary setObject:[NSFNanoObject _safeArrayFromArray:object] forKey:theKey];
+        
+		else
+			[cleanDictionary setObject:[NSFNanoObject _safeObjectFromObject:object] forKey:theKey];
+	}
+    
+	return cleanDictionary;
+}
+
++ (NSArray *)_safeArrayFromArray:(NSArray *)array
+{
+	NSMutableArray *cleanArray = [NSMutableArray array];
+    
+	for (id object in array) {
+		if ([object isKindOfClass:[NSArray class]] || [object isKindOfClass:[NSSet class]])
+			[cleanArray addObject:[NSFNanoObject _safeArrayFromArray:object]];
+        
+		else if ([object isKindOfClass:[NSDictionary class]])
+			[cleanArray addObject:[NSFNanoObject _safeDictionaryFromDictionary:object]];
+        
+		else
+			[cleanArray addObject:[NSFNanoObject _safeObjectFromObject:object]];
+	}
+    
+	return cleanArray;
 }
 
 /** \endcond */

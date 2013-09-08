@@ -53,6 +53,10 @@
  
  */
 
+extern NSDictionary * safeJSONDictionaryFromDictionary (NSDictionary *dictionary);
+extern NSArray * safeJSONArrayFromArray (NSArray *array);
+extern id safeJSONObjectFromObject (id object);
+
 extern NSString * NSFStringFromMatchType (NSFMatchType aMatchType);
 
 extern void _NSFLog (NSString  *format, ...);
@@ -67,13 +71,13 @@ extern NSString * const NSFValue;
 extern NSString * const NSFDatatype;
 extern NSString * const NSFCalendarDate;
 extern NSString * const NSFObjectClass;
-extern NSString * const NSFPlist;
+extern NSString * const NSFKeyedArchive;
 extern NSString * const NSFAttribute;
 
 #pragma mark -
 
 extern NSString * const NSF_Private_NSFKeys_NSFKey;
-extern NSString * const NSF_Private_NSFKeys_NSFPlist;
+extern NSString * const NSF_Private_NSFKeys_NSFKeyedArchive;
 extern NSString * const NSF_Private_NSFValues_NSFKey;
 extern NSString * const NSF_Private_NSFValues_NSFAttribute;
 extern NSString * const NSF_Private_NSFValues_NSFValue;
@@ -90,10 +94,7 @@ extern NSInteger const NSF_Private_MacOSXErrorCodeKey;
 extern NSString * const NSFP_TableIdentifier;
 extern NSString * const NSFP_ColumnIdentifier;
 extern NSString * const NSFP_DatatypeIdentifier;
-extern NSString * const NSFP_FullDatatypeIdentifier;
 
 extern NSString * const NSFRowIDColumnName;         // SQLite's standard UID property
-
-extern NSString * const NSFP_SchemaTable;           // Private, reserved NSF table name to store datatypes
 
 /** \endcond */

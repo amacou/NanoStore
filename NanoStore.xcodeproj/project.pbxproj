@@ -57,6 +57,11 @@
 		74A7DA561399B0E7008F46F1 /* NSFNanoStore.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 74B63DEE129F25C400B3B2A7 /* NSFNanoStore.h */; };
 		74A7DA581399B0E7008F46F1 /* NSFNanoEngine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 74B63DD0129F25C400B3B2A7 /* NSFNanoEngine.h */; };
 		74A7DA5A1399B0E7008F46F1 /* NSFNanoResult.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 74B63DD2129F25C400B3B2A7 /* NSFNanoResult.h */; };
+		74ACCBAA168FA05800585114 /* NSFOrderedDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 74ACCBA8168FA05800585114 /* NSFOrderedDictionary.h */; };
+		74ACCBAB168FA05800585114 /* NSFOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 74ACCBA9168FA05800585114 /* NSFOrderedDictionary.m */; };
+		74ACCBAC168FA05800585114 /* NSFOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 74ACCBA9168FA05800585114 /* NSFOrderedDictionary.m */; };
+		74ACCBAD168FA05800585114 /* NSFOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 74ACCBA9168FA05800585114 /* NSFOrderedDictionary.m */; };
+		74ACCBAE168FA05800585114 /* NSFOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 74ACCBA9168FA05800585114 /* NSFOrderedDictionary.m */; };
 		74B63DF0129F25C400B3B2A7 /* NSFNanoEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 74B63DD0129F25C400B3B2A7 /* NSFNanoEngine.h */; };
 		74B63DF1129F25C400B3B2A7 /* NSFNanoEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B63DD1129F25C400B3B2A7 /* NSFNanoEngine.m */; };
 		74B63DF2129F25C400B3B2A7 /* NSFNanoResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 74B63DD2129F25C400B3B2A7 /* NSFNanoResult.h */; };
@@ -195,6 +200,8 @@
 		74A4EF11138E3EBD00FBC46C /* NSFNanoSortDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NSFNanoSortDescriptor.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		74A4EF18138E47B100FBC46C /* NanoStoreSortTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NanoStoreSortTests.h; sourceTree = "<group>"; };
 		74A4EF19138E47B100FBC46C /* NanoStoreSortTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NanoStoreSortTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		74ACCBA8168FA05800585114 /* NSFOrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFOrderedDictionary.h; sourceTree = "<group>"; };
+		74ACCBA9168FA05800585114 /* NSFOrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSFOrderedDictionary.m; sourceTree = "<group>"; };
 		74B20983122B280C0079E2FF /* NanoStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NanoStore.m; sourceTree = "<group>"; };
 		74B20984122B280C0079E2FF /* NanoStoreTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NanoStoreTester.h; sourceTree = "<group>"; };
 		74B20985122B280C0079E2FF /* NanoStoreTester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NanoStoreTester.m; sourceTree = "<group>"; };
@@ -505,6 +512,8 @@
 				74B63DD1129F25C400B3B2A7 /* NSFNanoEngine.m */,
 				74B63DD2129F25C400B3B2A7 /* NSFNanoResult.h */,
 				74B63DD3129F25C400B3B2A7 /* NSFNanoResult.m */,
+				74ACCBA8168FA05800585114 /* NSFOrderedDictionary.h */,
+				74ACCBA9168FA05800585114 /* NSFOrderedDictionary.m */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -590,6 +599,7 @@
 				74B63E0A129F25C400B3B2A7 /* NSFNanoSearch.h in Headers */,
 				74B63E0C129F25C400B3B2A7 /* NSFNanoStore.h in Headers */,
 				74A4EF12138E3EBD00FBC46C /* NSFNanoSortDescriptor.h in Headers */,
+				74ACCBAA168FA05800585114 /* NSFOrderedDictionary.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -656,6 +666,7 @@
 				8DC2EF520486A6940098B216 /* Resources */,
 				8DC2EF540486A6940098B216 /* Sources */,
 				8DC2EF560486A6940098B216 /* Frameworks */,
+				74C90118173B65B6006A22FE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -673,7 +684,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "NanoStore" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -752,7 +763,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\nXcodeCoverage/exportenv.sh";
 		};
 		74C1FABC1538E14B0077DAD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -766,6 +777,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		74C90118173B65B6006A22FE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Running target script...\"\nXcodeCoverage/exportenv.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -785,6 +809,7 @@
 				748D34701397730900FD5565 /* NSFNanoEngine.m in Sources */,
 				748D34721397730900FD5565 /* NSFNanoResult.m in Sources */,
 				74FA5DE4155795CC00217E09 /* fopenCompatibilityFix.c in Sources */,
+				74ACCBAC168FA05800585114 /* NSFOrderedDictionary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -813,6 +838,7 @@
 				748EB00A153F09A600F5C7F2 /* NanoStoreGlobalsTests.m in Sources */,
 				7412893A15718D90002D5138 /* NanoCarTestClass.m in Sources */,
 				7412893E15718F2C002D5138 /* NanoPersonTestClass.m in Sources */,
+				74ACCBAD168FA05800585114 /* NSFOrderedDictionary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -842,6 +868,7 @@
 				74FA5DE6155795CC00217E09 /* fopenCompatibilityFix.c in Sources */,
 				7412893B15718D90002D5138 /* NanoCarTestClass.m in Sources */,
 				7412893F15718F2C002D5138 /* NanoPersonTestClass.m in Sources */,
+				74ACCBAE168FA05800585114 /* NSFOrderedDictionary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -859,6 +886,7 @@
 				74B63E0B129F25C400B3B2A7 /* NSFNanoSearch.m in Sources */,
 				74B63E0D129F25C400B3B2A7 /* NSFNanoStore.m in Sources */,
 				74A4EF13138E3EBD00FBC46C /* NSFNanoSortDescriptor.m in Sources */,
+				74ACCBAB168FA05800585114 /* NSFOrderedDictionary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -948,17 +976,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = "";
+				"WARNING_CFLAGS[arch=*]" = "-Wall";
 			};
 			name = Debug;
 		};
@@ -966,14 +1000,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = "";
+				"WARNING_CFLAGS[arch=*]" = "-Wall";
 			};
 			name = Release;
 		};
@@ -994,7 +1034,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = nanostore2;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv6 armv7 i386";
+				VALID_ARCHS = "armv6 armv7 armv7s i386";
 			};
 			name = Debug;
 		};
@@ -1012,7 +1052,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = nanostore2;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv6 armv7 i386";
+				VALID_ARCHS = "armv6 armv7 armv7s i386";
 			};
 			name = Release;
 		};

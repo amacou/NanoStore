@@ -73,7 +73,7 @@
  - 3) Obtain the results specifying whether objects or keys should be returned (*)
  
  (*) Request objects if you're interested in the data. Otherwise, you should request keys if you need to feed the result to another method, such as NSFNanoStore
- \link NSFNanoStore::removeObjectsWithKeysInArray:error: -(BOOL)removeObjectsWithKeysInArray:(NSArray *)theKeys error:(out NSError **)outError \endlink method.
+ \link NSFNanoStore::removeObjectsWithKeysInArray:error: -(BOOL)removeObjectsWithKeysInArray:(NSArray *)theKeys error:(NSError * __autoreleasing *)outError \endlink method.
  
  @details <b>Example: finding all objects with the attribute 'LastName' and value 'Doe'.</b>
  @code
@@ -100,7 +100,7 @@
  
  // Remove the NanoObjects matching the selected UUIDs
  NSError *outError = nil;
- if (YES == [nanoStore removeObjectsWithKeysInArray:matchingKeys error:&outError]) {
+ if ([nanoStore removeObjectsWithKeysInArray:matchingKeys error:&outError]) {
  NSLog(@"The matching objects have been removed.");
  } else {
  NSLog(@"An error has occurred while removing the matching objects. Reason: %@", [outError localizedDescription]);
@@ -175,11 +175,13 @@
 /** * The sort holds an array of one or more sort descriptors of type \link NSFNanoSortDescriptor NSFNanoSortDescriptor \endlink. */
 @property (nonatomic, strong, readwrite) NSArray *sort;
 /** * The filterClass allows to filter the results based on a specific object class. */
-@property (nonatomic, strong, readwrite) NSString *filterClass;
+@property (nonatomic, copy, readwrite) NSString *filterClass;
 /** * If an expression has an offset clause, then the first M rows are omitted from the result set returned by the search operation and the next N rows are returned, where M and N are the values that the offset and limit clauses evaluate to, respectively. Or, if the search would return less than M+N rows if it did not have a limit clause, then the first M rows are skipped and the remaining rows (if any) are returned. */
 @property (nonatomic, assign, readwrite) NSUInteger offset;
 /** * The limit clause is used to place an upper bound on the number of rows returned by a Search operation. */
 @property (nonatomic, assign, readwrite) NSUInteger limit;
+/** * limit a Search to a particular bag. */
+@property (nonatomic, assign, readwrite) NSFNanoBag *bag;
 
 /** @name Creating and Initializing a Search
  */
@@ -213,11 +215,11 @@
  * @param theReturnType the type of object to be returned. Can be \link Globals::NSFReturnObjects NSFReturnObjects \endlink or \link Globals::NSFReturnKeys NSFReturnKeys \endlink.
  * @param outError is used if an error occurs. May be NULL.
  * @return An array is returned if: 1) the sort has been specified or 2) the return type is \link Globals::NSFReturnKeys NSFReturnKeys \endlink. Otherwise, a dictionary is returned.
- * @note The sort descriptor will be ignored when returning requesting NSFReturnKeys.
- * @see \link searchObjectsAdded:date:returnType:error: - (id)searchObjectsAdded:(NSFDateMatchType)theDateMatch date:(NSDate *)theDate returnType:(NSFReturnType)theReturnType error:(out NSError **)outError \endlink
+ * @note The sort descriptor will be ignored when the return type is NSFReturnKeys.
+ * @see \link searchObjectsAdded:date:returnType:error: - (id)searchObjectsAdded:(NSFDateMatchType)theDateMatch date:(NSDate *)theDate returnType:(NSFReturnType)theReturnType error:(NSError * __autoreleasing *)outError \endlink
  */
 
-- (id)searchObjectsWithReturnType:(NSFReturnType)theReturnType error:(out NSError **)outError;
+- (id)searchObjectsWithReturnType:(NSFReturnType)theReturnType error:(NSError * __autoreleasing *)outError;
 
 /** * Performs a search using the values of the properties before, on or after a given date.
  * @param theDateMatch the type of date comparison. Can be \link Globals::NSFBeforeDate NSFBeforeDate \endlink, \link Globals::NSFOnDate NSFOnDate \endlink or \link Globals::NSFAfterDate NSFAfterDate \endlink.
@@ -225,11 +227,11 @@
  * @param theReturnType the type of object to be returned. Can be \link Globals::NSFReturnObjects NSFReturnObjects \endlink or \link Globals::NSFReturnKeys NSFReturnKeys \endlink.
  * @param outError is used if an error occurs. May be NULL.
  * @return If theReturnType is \link Globals::NSFReturnObjects NSFReturnObjects \endlink, a dictionary is returned. Otherwise, an array is returned.
- * @note The sort descriptor will be ignored when returning requesting NSFReturnKeys.
- * @see \link searchObjectsWithReturnType:error: - (id)searchObjectsWithReturnType:(NSFReturnType)theReturnType error:(out NSError **)outError \endlink
+ * @note The sort descriptor will be ignored when the return type is NSFReturnKeys.
+ * @see \link searchObjectsWithReturnType:error: - (id)searchObjectsWithReturnType:(NSFReturnType)theReturnType error:(NSError * __autoreleasing *)outError \endlink
  */
 
-- (id)searchObjectsAdded:(NSFDateMatchType)theDateMatch date:(NSDate *)theDate returnType:(NSFReturnType)theReturnType error:(out NSError **)outError;
+- (id)searchObjectsAdded:(NSFDateMatchType)theDateMatch date:(NSDate *)theDate returnType:(NSFReturnType)theReturnType error:(NSError * __autoreleasing *)outError;
 
 /** * Returns the result of the aggregate function.
  * @param theFunctionType is the function type to be applied.
@@ -281,23 +283,23 @@
  * NSFNanoSearch *search = [NSFNanoSearch searchWithStore:nanoStore];
  *
  * // Perform the search
- * // The query will be rewritten as @"SELECT NSFKey, NSFPlist, NSFObjectClass FROM NSFKeys"
+ * // The query will be rewritten as @"SELECT NSFKey, NSFKeyedArchive, NSFObjectClass FROM NSFKeys"
  * NSDictionary *results = [search executeSQL:@"SELECT foo, bar FROM NSFKeys" returnType:NSFReturnObjects error:nil];
  * @endcode
  * @note The sort descriptor will be ignored when executing custom SQL statements.
  * @see \link executeSQL: - (NSFNanoResult *)executeSQL:(NSString *)theSQLStatement \endlink
  */
 
-- (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(out NSError **)outError;
+- (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(NSError * __autoreleasing *)outError;
 
 /** * Performs a search with a given SQL statement.
  * @param theSQLStatement is the SQL statement to be executed. Must not be nil or an empty string.
  * @return Returns a NSFNanoResult.
  * @note
  * Use this method when you need to perform more advanced SQL statements. If you just want to query NanoObjects using your own SQL statement,
- * you may want to use \link executeSQL:returnType:error: - (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(out NSError **)outError \endlink instead.
+ * you may want to use \link executeSQL:returnType:error: - (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(NSError * __autoreleasing *)outError \endlink instead.
  * @par
- * The key difference between this method and \link executeSQL:returnType:error: - (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(out NSError **)outError \endlink
+ * The key difference between this method and \link executeSQL:returnType:error: - (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(NSError * __autoreleasing *)outError \endlink
  * is that this method doesn't perform any check at all. The SQL statement will be sent verbatim to SQLite.
  * @details <b>Example:</b>
  * @code
@@ -318,7 +320,7 @@
  * // Perform the search
  * NSFNanoResult *result = [search executeSQL:@"SELECT COUNT(*) FROM NSFKEYS"];
  * @endcode
- * @see \link executeSQL:returnType:error: - (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(out NSError **)outError \endlink
+ * @see \link executeSQL:returnType:error: - (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(NSError * __autoreleasing *)outError \endlink
  * @note The sort descriptor will be ignored when executing custom SQL statements.
  */
 
@@ -352,7 +354,7 @@
  * NSFNanoResult *results = [search explainSQL:@"SELECT * FROM NSFValues"];
  * @endcode
  * @see \link executeSQL: - (NSFNanoResult *)executeSQL:(NSString *)theSQLStatement \endlink
- * @see \link executeSQL:returnType:error: - (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(out NSError **)outError \endlink
+ * @see \link executeSQL:returnType:error: - (id)executeSQL:(NSString *)theSQLStatement returnType:(NSFReturnType)theReturnType error:(NSError * __autoreleasing *)outError \endlink
  */
 
 - (NSFNanoResult *)explainSQL:(NSString *)theSQLStatement;
@@ -383,5 +385,15 @@
 - (void)reset;
 
 //@}
+
+/** Returns a string representation of the search.
+ */
+
+- (NSString *)description;
+
+/** Returns a JSON representation of the search.
+ */
+
+- (NSString *)JSONDescription;
 
 @end
